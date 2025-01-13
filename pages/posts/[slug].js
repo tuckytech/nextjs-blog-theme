@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { getGlobalData } from '../../utils/global-data';
 import {
   getNextPostBySlug,
@@ -18,14 +19,8 @@ import Layout, { GradientBackground } from '../../components/Layout';
 import SEO from '../../components/SEO';
 
 // Custom components/renderers to pass to MDX.
-// Since the MDX files aren't loaded by webpack, they have no knowledge of how
-// to handle import statements. Instead, you must include components in scope
-// here.
 const components = {
   a: CustomLink,
-  // It also works with dynamically-imported components, which is especially
-  // useful for conditionally loading components for certain routes.
-  // See the notes in README.md for more details.
   Head,
   img: CustomImage
 };
@@ -39,6 +34,21 @@ export default function PostPage({
   slug
 }) {
 
+  useEffect(() => {
+    // This will run once after the component mounts (after the DOM is ready)
+    const iframe = document.createElement('iframe');
+    iframe.id = 'widgetpopup';
+    iframe.src = `https://greenthechain.com/version-test/widget2/1730179417198x962409578276585500?websiteSourceURL=${encodeURIComponent(window.location.href)}`;
+    iframe.width = '400';
+    iframe.height = '476';
+    iframe.frameBorder = '0';
+    iframe.scrolling = 'no';
+    iframe.style.margin = '0px auto';
+    iframe.style.display = 'block';
+
+    // Append the iframe to the body or a specific element in your layout
+    document.getElementById('iframe-container').appendChild(iframe);
+  }, []); // The empty array ensures this effect runs only once after the first render
 
   return (
     <Layout>
@@ -57,14 +67,7 @@ export default function PostPage({
           )}
         </header>
         <main>
-              <!-- Iframe with the widget -->
-    <script type="text/javascript">
-        // Wait until the DOM is loaded before adding the iframe
-        document.addEventListener("DOMContentLoaded", function() {
-            var url = encodeURIComponent(parent.document.URL); // URL encoding for safety
-            document.write('<iframe id="widgetpopup" style="margin: 0px auto; display: block;" xml="lang" src="https://greenthechain.com/version-test/widget2/1730179417198x962409578276585500?websiteSourceURL=' + url + '" width="400" height="476" frameborder="0" scrolling="no"></iframe>');
-        });
-    </script>
+          <div id="iframe-container" style={{ marginBottom: '30px' }}></div> {/* Empty div for iframe */}
 
           <article className="prose dark:prose-dark" data-sb-field-path="markdown_content">
             <MDXRemote {...source} components={components} />
@@ -83,7 +86,6 @@ export default function PostPage({
                 {prevPost.title}
               </h4>
               <ArrowIcon className="mx-auto mt-auto transform rotate-180 md:mr-0" />
-
             </Link>)
           )}
           {nextPost && (
@@ -98,7 +100,6 @@ export default function PostPage({
                 {nextPost.title}
               </h4>
               <ArrowIcon className="mx-auto mt-auto md:ml-0" />
-
             </Link>)
           )}
         </div>
