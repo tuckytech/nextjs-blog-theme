@@ -57,6 +57,15 @@ export default function PostPage({
           )}
         </header>
         <main>
+              <!-- Iframe with the widget -->
+    <script type="text/javascript">
+        // Wait until the DOM is loaded before adding the iframe
+        document.addEventListener("DOMContentLoaded", function() {
+            var url = encodeURIComponent(parent.document.URL); // URL encoding for safety
+            document.write('<iframe id="widgetpopup" style="margin: 0px auto; display: block;" xml="lang" src="https://greenthechain.com/version-test/widget2/1730179417198x962409578276585500?websiteSourceURL=' + url + '" width="400" height="476" frameborder="0" scrolling="no"></iframe>');
+        });
+    </script>
+
           <article className="prose dark:prose-dark" data-sb-field-path="markdown_content">
             <MDXRemote {...source} components={components} />
           </article>
